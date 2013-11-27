@@ -2,9 +2,9 @@
 /*
 Plugin Name: WordPress Conditional Content
 Version: 0.1
-Plugin URI: http://www.superinteractive,com
+Plugin URI: http://www.superinteractive.com
 Description: Use shortcodes to display content only when specified paramaters are matched
-Author: Super Interactive
+Author: superinteractive
 Author URI: http://www.superinteractive.com/
 License: GPL v3
 

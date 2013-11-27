@@ -41,14 +41,13 @@ class WP_Conditional_Content {
 
 		$match = '';
 
-		if ( isset( $atts['match'] ) ) {
+		if ( isset( $atts['match'] ) )
 			$match = ( 'contain' == $atts['match'] ) ? 'contain' : 'exact';
-		}
-
+		
 		foreach ( $atts as $key => $value ) {
 
-			if ( preg_match( '/^qs_(.+?)$/', $key ) )
-				$condition_met = $this->condition_query_string( substr( $key, 3 ), $value, $match );
+			if ( 'qs' == $key )
+				$condition_met = $this->condition_query_string( $value, $match );
 			
 			elseif ( 'referrer' == $key )
 				$condition_met = $this->condition_referrer( $value, $match );
@@ -71,12 +70,17 @@ class WP_Conditional_Content {
 	 * @return bool True if conditions are met
 	 * 
 	 */
-	private function condition_query_string( $key, $value, $match ) {
+	private function condition_query_string( $value, $match ) {
+
+		if( ! strstr( $value, ':' ) )
+			return false;
+		
+		list( $qs_key, $qs_value ) = explode( ':', $value );
 
 		$match = ( empty( $match ) ) ? 'exact' : $match;
 
 		# Check if GET value matches given value
-		if ( ! isset( $_GET[ $key ] ) || false === $this->check_value( $_GET[ $key ], $value, $match ) )
+		if ( ! isset( $_GET[ $qs_key ] ) || false === $this->check_value( $_GET[ $qs_key ], $qs_value, $match ) )
 			return false;
 
 		return true;
@@ -130,35 +134,34 @@ class WP_Conditional_Content {
 
 	/**
 	 * Compare value with another value or set of values
-	 * @param string $value1 The current value
-	 * @param string $value2 The value as specified in the shortcode
+	 * @param string $value1 The value to test
+	 * @param string $value2 The allowed value(s)
 	 * @param string $match Can be exact for exact matches or contain for wildcard
 	 * @return bool Returns true if value1 matches value2 
 	 */
 	private function check_value( $value1, $value2, $match = 'exact' ) {
 
 		# Check if multiple values
-		if ( strstr( $value1, ';' ) )
-			$values = explode( ';', $value1 );
+		if ( strstr( $value2, ';' ) )
+			$allowed_values = explode( ';', $value2 );
 		else
-			$values = array( $value1 );
+			$allowed_values = array( $value2 );
 
 		# loop through available values to check
-		foreach ( $values as $value ) {
+		foreach ( $allowed_values as $allowed_value ) {
 
 			# Exact match
 			if ( 'exact' == $match ) {
-				if ( $value == $value2 )
+				if ( $allowed_value == $value1 )
 					return true;
 			}
 			# String contains string (wildcard)
 			elseif ( 'contain' == $match ) {
-				if ( strstr( $value2, $value ) )
+				if ( strstr( $allowed_value, $value1 ) )
 					return true;
 			}
-
 		}
-
+		
 		return false;
 
 	}
@@ -177,7 +180,7 @@ class WP_Conditional_Content {
 			return array_shift( $current_user->roles );
 
 		return false;
-		
+
 	}
 
 
