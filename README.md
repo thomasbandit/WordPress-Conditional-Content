@@ -112,3 +112,6 @@ Planned for future releases:
 * Add 'not equals' operator (!=)
 * Add ranges, match between numeric values, test x < y and x > y.
 * Add more condition types / things to test.
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/superinteractive/wordpress-conditional-content/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
