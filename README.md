@@ -79,6 +79,31 @@ You can have a condition match on multiple values by using the semicolon as a se
 	  This text is displayed for people who bought either a nice pair of shoes or a great fashionable coat.
 	[/if]
 	
+### Nesting `if` statements
+
+You can nest statements but you have to use iteration. This has to do with the limitations of the built-in shortcode API.
+
+	[if qs="tonight:the-night"]
+	  
+	  Tonight's the night.
+	  
+	  [if2 qs="future:beautiful"]
+	  
+	    We create our own destiny every day we live.
+	  
+	  [/if2]
+	  
+	  [if2 qs="future:plastic;sheets"]
+	  
+	    I see sheets of plastic in your future.
+	  
+	  [/if2]
+	  
+	[/if]
+	
+You can nest up to if4 (4 levels).
+
+	
 ### To do's
 Planned for future releases:
 
